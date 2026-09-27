@@ -1,6 +1,7 @@
 package fr.taevie.parc.dao;
 
 import fr.taevie.parc.model.Famille;
+import fr.taevie.parc.model.Gamme;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
