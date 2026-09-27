@@ -1,20 +1,20 @@
 package fr.taevie.parc;
 
 import fr.taevie.parc.dao.Database;
-import fr.taevie.parc.dao.FamilleDao;
-import fr.taevie.parc.model.Famille;
+import fr.taevie.parc.dao.VehiculeDao;
+import fr.taevie.parc.model.Vehicule;
 
 public class Main {
 
     public static void main(String[] args) throws Exception {
         Database.initSchema();
 
-        FamilleDao dao = new FamilleDao();
-        dao.insert(new Famille("Grattoir"));
-        dao.insert(new Famille("Mouilleur"));
+        VehiculeDao dao = new VehiculeDao();
+        dao.insert(new Vehicule("125B69C"));
+        dao.insert(new Vehicule("128N64D"));
 
-        for (Famille f : dao.findAll()) {
-            System.out.println(f.getId() + " - " + f);
+        for (Vehicule v : dao.findAll()) {
+            System.out.println(v.getId() + " - " + v);
         }
         System.out.println("Base prête !");
     }

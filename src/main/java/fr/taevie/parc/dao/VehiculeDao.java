@@ -3,8 +3,11 @@ package fr.taevie.parc.dao;
 import fr.taevie.parc.model.Vehicule;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VehiculeDao {
+
     public int insert(Vehicule vehicule) throws SQLException {
 
         String sql = "INSERT INTO vehicule (immatriculation, marque, modele) VALUES (?, ?, ?)";
@@ -26,5 +29,24 @@ public class VehiculeDao {
             throw new SQLException("Aucun id généré pour le véhicule");
         }
 
+    }
+
+    public List<Vehicule> findAll() throws SQLException {
+        String sql = "SELECT id_vehicule, immatriculation, marque, modele FROM vehicule ORDER BY immatriculation";
+        List<Vehicule> vehicules = new ArrayList<>();
+
+        try (Connection conn = Database.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                int id = rs.getInt("id_vehicule");
+                String immatriculation = rs.getString("immatriculation");
+                String marque = rs.getString("marque");
+                String modele = rs.getString("modele");
+                vehicules.add(new Vehicule(id, immatriculation, marque, modele));
+            }
+        }
+        return vehicules;
     }
 }

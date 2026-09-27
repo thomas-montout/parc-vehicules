@@ -18,6 +18,10 @@ public class Vehicule {
         this(0, immatriculation, marque, modele);
     }
 
+    public Vehicule(String immatriculation) {
+        this(immatriculation, "", "");
+    }
+
     public int getId() {
         return id;
     }
