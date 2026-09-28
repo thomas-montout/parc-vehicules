@@ -1,7 +1,9 @@
 package fr.taevie.parc;
 
-import fr.taevie.parc.dao.Database;
-import fr.taevie.parc.dao.VehiculeDao;
+import fr.taevie.parc.dao.*;
+import fr.taevie.parc.model.Famille;
+import fr.taevie.parc.model.Gamme;
+import fr.taevie.parc.model.Materiel;
 import fr.taevie.parc.model.Vehicule;
 
 public class Main {
@@ -9,12 +11,20 @@ public class Main {
     public static void main(String[] args) throws Exception {
         Database.initSchema();
 
-        VehiculeDao dao = new VehiculeDao();
-        dao.insert(new Vehicule("125B69C"));
-        dao.insert(new Vehicule("128N64D"));
+        FamilleDao familleDao = new FamilleDao();
+        GammeDao gammeDao = new GammeDao();
+        MaterielDao materielDao = new MaterielDao();
 
-        for (Vehicule v : dao.findAll()) {
-            System.out.println(v.getId() + " - " + v);
+        Famille mouilleur = new Famille("Mouilleur");
+        familleDao.insert(mouilleur);
+
+        Gamme standard = gammeDao.findByLibelle("Standard");
+
+        materielDao.insert(new Materiel(mouilleur, standard, "35 cm"));
+        materielDao.insert(new Materiel(mouilleur, standard, "45 cm"));
+
+        for (Materiel m : materielDao.findAll()) {
+            System.out.println(m.getId() + " - " + m);
         }
         System.out.println("Base prête !");
     }
