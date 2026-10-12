@@ -142,4 +142,33 @@ public class AffectationDao {
             stmt.executeUpdate();
         }
     }
+
+    /**
+     * Quantité d'un matériel actuellement présente dans les véhicules,
+     * tous véhicules confondus. Les affectations clôturées ne comptent pas.
+     *
+     * @param idMateriel le matériel concerné
+     * @return la quantité affectée, 0 si aucune affectation en cours
+     * @throws SQLException si la lecture échoue
+     */
+    public int quantiteAffectee(int idMateriel) throws SQLException {
+        String sql = """
+            SELECT COALESCE(SUM(quantite), 0)
+            FROM affectation
+            WHERE id_materiel = ? AND date_fin IS NULL
+            """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idMateriel);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
 }

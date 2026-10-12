@@ -66,4 +66,28 @@ public class FamilleDao {
 
         return familles;
     }
+
+    /**
+     * Cherche une famille par son libellé exact.
+     *
+     * @param libelle le libellé recherché
+     * @return la famille trouvée, ou null si elle n'existe pas
+     * @throws SQLException si la lecture échoue
+     */
+    public Famille findByLibelle(String libelle) throws SQLException {
+        String sql = "SELECT id_famille, libelle FROM famille WHERE libelle = ?";
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, libelle);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Famille(rs.getInt("id_famille"), rs.getString("libelle"));
+                }
+            }
+        }
+        return null;
+    }
 }
