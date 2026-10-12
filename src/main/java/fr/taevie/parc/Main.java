@@ -1,31 +1,29 @@
-package fr.taevie.parc;
-
 import fr.taevie.parc.dao.*;
-import fr.taevie.parc.model.Famille;
-import fr.taevie.parc.model.Gamme;
-import fr.taevie.parc.model.Materiel;
-import fr.taevie.parc.model.Vehicule;
+import fr.taevie.parc.model.*;
 
-public class Main {
+public static void main(String[] args) throws Exception {
+    Database.initSchema();
 
-    public static void main(String[] args) throws Exception {
-        Database.initSchema();
+    FamilleDao familleDao = new FamilleDao();
+    GammeDao gammeDao = new GammeDao();
+    MaterielDao materielDao = new MaterielDao();
+    VehiculeDao vehiculeDao = new VehiculeDao();
+    AffectationDao affectationDao = new AffectationDao();
 
-        FamilleDao familleDao = new FamilleDao();
-        GammeDao gammeDao = new GammeDao();
-        MaterielDao materielDao = new MaterielDao();
+    Famille mouilleur = new Famille("Mouilleur");
+    familleDao.insert(mouilleur);
 
-        Famille mouilleur = new Famille("Mouilleur");
-        familleDao.insert(mouilleur);
+    Gamme standard = gammeDao.findByLibelle("Standard");
 
-        Gamme standard = gammeDao.findByLibelle("Standard");
+    Materiel m35 = new Materiel(mouilleur, standard, "35 cm");
+    materielDao.insert(m35);
 
-        materielDao.insert(new Materiel(mouilleur, standard, "35 cm"));
-        materielDao.insert(new Materiel(mouilleur, standard, "45 cm"));
+    Vehicule kangoo = new Vehicule("AB-123-CD");
+    vehiculeDao.insert(kangoo);
 
-        for (Materiel m : materielDao.findAll()) {
-            System.out.println(m.getId() + " - " + m);
-        }
-        System.out.println("Base prête !");
+    affectationDao.insert(new Affectation(m35, kangoo, 3, LocalDate.now()));
+
+    for (Affectation a : affectationDao.findEnCours()) {
+        System.out.println(a.getVehicule() + " : " + a.getQuantite() + " × " + a.getMateriel());
     }
 }
