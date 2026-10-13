@@ -6,19 +6,7 @@ import fr.taevie.parc.model.Vehicule;
 import fr.taevie.parc.service.AffectationService;
 import fr.taevie.parc.service.RegleGestionException;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.RowFilter;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableRowSorter;
@@ -51,6 +39,7 @@ public class FenetrePrincipale extends JFrame {
 
     public FenetrePrincipale() {
         setTitle("ISO Stock");
+        setIconImages(Icones.application());
         setSize(1000, 620);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

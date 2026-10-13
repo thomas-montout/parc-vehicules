@@ -6,12 +6,20 @@
 
     <groupId>fr.taevie</groupId>
     <artifactId>parc-vehicules</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
+    <name>ISO Stock</name>
+    <description>Suivi du matériel embarqué dans une flotte de véhicules</description>
 
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <!--
+            On compile pour Java 17 et non 25 : le JAR tourne ainsi sur tout
+            poste équipé de Java 17 ou plus récent. Compilé en 25, il refuserait
+            de démarrer chez un client resté en 17 ou 21
+            (UnsupportedClassVersionError). Le code n'utilise rien au-delà de 17.
+        -->
+        <maven.compiler.release>17</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>5.11.4</junit.version>
     </properties>
 
     <dependencies>
@@ -23,17 +31,28 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf</artifactId>
-            <version>3.4.1</version>
-        </dependency>
-        <dependency>
-            <groupId>com.formdev</groupId>
-            <artifactId>flatlaf</artifactId>
             <version>3.6</version>
         </dependency>
+
+        <!-- tests uniquement : n'est pas embarqué dans le JAR livré -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
     <build>
         <finalName>ISO-Stock</finalName>
         <plugins>
+            <!-- version récente nécessaire pour exécuter les tests JUnit 5 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -45,9 +64,20 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>fr.taevie.parc.Main</mainClass>
+                                    <manifestEntries>
+                                        <!--
+                                            Autorise SQLite à charger sa bibliothèque native sans
+                                            avertissement (Java 22+). Ignoré par les Java plus anciens,
+                                            ce qui évite de mettre l'option dans le .bat.
+                                        -->
+                                        <Enable-Native-Access>ALL-UNNAMED</Enable-Native-Access>
+                                        <Implementation-Title>ISO Stock</Implementation-Title>
+                                        <Implementation-Version>${project.version}</Implementation-Version>
+                                    </manifestEntries>
                                 </transformer>
                             </transformers>
                             <filters>

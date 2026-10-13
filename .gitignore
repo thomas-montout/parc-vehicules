@@ -1,4 +1,11 @@
+# compilation Maven
 target/
-*.db
-.idea/
 dependency-reduced-pom.xml
+
+# base de données locale : elle se régénère, et contient les données réelles
+*.db
+*.db-journal
+
+# configuration personnelle d'IntelliJ
+.idea/
+*.iml

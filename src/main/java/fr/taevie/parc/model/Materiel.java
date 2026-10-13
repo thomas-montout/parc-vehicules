@@ -71,6 +71,26 @@ public class Materiel {
     }
 
     /**
+     * Deux matériels sont égaux s'ils désignent la même ligne en base.
+     * Même raison que pour {@link Vehicule#equals(Object)}.
+     */
+    @Override
+    public boolean equals(Object autre) {
+        if (this == autre) {
+            return true;
+        }
+        if (!(autre instanceof Materiel m)) {
+            return false;
+        }
+        return id != 0 && id == m.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
+
+    /**
      * Libellé complet de l'article, tel qu'il sera affiché dans l'interface.
      * La gamme n'apparaît que si elle est différente de Standard.
      *

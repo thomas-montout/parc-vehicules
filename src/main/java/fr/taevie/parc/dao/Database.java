@@ -15,9 +15,22 @@ import java.sql.Statement;
  */
 public class Database {
 
-    /** Emplacement du fichier de base, relatif au dossier de lancement. */
-    /** La base vit dans le même dossier que l'application. */
-    private static final String URL = "jdbc:sqlite:" + cheminBase();
+    /**
+     * Propriété système permettant de choisir un autre fichier de base.
+     * Les tests s'en servent pour travailler sur une base temporaire, sans
+     * jamais toucher aux vraies données : -Diso.db=C:\chemin\test.db
+     */
+    public static final String PROPRIETE_CHEMIN = "iso.db";
+
+    /**
+     * Adresse JDBC de la base. Par défaut, la base vit dans le même dossier
+     * que l'application ; la propriété {@link #PROPRIETE_CHEMIN} la remplace.
+     * Recalculée à chaque appel pour que les tests puissent en changer.
+     */
+    private static String url() {
+        String chemin = System.getProperty(PROPRIETE_CHEMIN);
+        return "jdbc:sqlite:" + (chemin != null ? chemin : cheminBase());
+    }
 
     /**
      * Chemin absolu de parc.db, à côté du JAR exécuté — ou du dossier courant
@@ -44,7 +57,7 @@ public class Database {
      * @throws SQLException si la base est inaccessible
      */
     public static Connection getConnection() throws SQLException {
-        Connection conn = DriverManager.getConnection(URL);
+        Connection conn = DriverManager.getConnection(url());
         try (Statement stmt = conn.createStatement()) {
             stmt.execute("PRAGMA foreign_keys = ON");
         }
