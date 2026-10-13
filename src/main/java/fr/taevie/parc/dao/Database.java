@@ -1,5 +1,6 @@
 package fr.taevie.parc.dao;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +16,23 @@ import java.sql.Statement;
 public class Database {
 
     /** Emplacement du fichier de base, relatif au dossier de lancement. */
-    private static final String URL = "jdbc:sqlite:parc.db";
+    /** La base vit dans le même dossier que l'application. */
+    private static final String URL = "jdbc:sqlite:" + cheminBase();
+
+    /**
+     * Chemin absolu de parc.db, à côté du JAR exécuté — ou du dossier courant
+     * pendant le développement dans l'IDE.
+     */
+    private static String cheminBase() {
+        try {
+            File source = new File(Database.class.getProtectionDomain()
+                    .getCodeSource().getLocation().toURI());
+            File dossier = source.isFile() ? source.getParentFile() : new File(".");
+            return new File(dossier, "parc.db").getAbsolutePath();
+        } catch (Exception e) {
+            return "parc.db";   // repli : dossier courant
+        }
+    }
 
     /**
      * Ouvre une connexion vers la base et active les clés étrangères.
