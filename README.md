@@ -107,7 +107,29 @@ puis lancer `fr.taevie.parc.Main`.
 
 ## Livraison
 
-Le dossier [`distribution/`](distribution) contient ce qui accompagne le JAR chez le client :
+### Version autonome (recommandée) : rien à installer chez le client
+
+Le script [`distribution/construire-exe.bat`](distribution/construire-exe.bat) appelle
+`jpackage` (fourni avec le JDK) pour fabriquer un dossier qui contient l'application
+**et son propre Java**, réduit aux seuls modules utilisés grâce à `jlink` :
+
+```
+ISO Stock/
+├── ISO Stock.exe     ← double-clic, avec le logo
+├── app/              ← le JAR
+├── runtime/          ← Java embarqué (≈ 70 Mo au total)
+├── LISEZMOI.txt
+└── parc.db           ← créé au premier lancement
+```
+
+Étapes, sous Windows : `mvn clean package` (ou panneau Maven → `package` dans IntelliJ),
+puis double-clic sur `distribution/construire-exe.bat`. Le dossier à livrer apparaît
+dans `target/livraison/`.
+
+La base se place à côté de l'exécutable : `Database` lit la propriété système
+`jpackage.app-path`, que le lanceur renseigne avec son propre chemin.
+
+### Version JAR : Java 17+ requis sur le poste
 
 ```
 ISO Stock/
@@ -117,7 +139,7 @@ ISO Stock/
 └── LISEZMOI.txt
 ```
 
-La base `parc.db` est créée au premier lancement, à côté du JAR, et le parc
+Dans les deux cas, la base `parc.db` est créée au premier lancement et le parc
 est importé automatiquement.
 
 ## Stack

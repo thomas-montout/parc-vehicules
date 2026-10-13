@@ -33,10 +33,21 @@ public class Database {
     }
 
     /**
-     * Chemin absolu de parc.db, à côté du JAR exécuté — ou du dossier courant
-     * pendant le développement dans l'IDE.
+     * Chemin absolu de parc.db :
+     * <ul>
+     *   <li>version .exe (jpackage) : à côté de « ISO Stock.exe » ;</li>
+     *   <li>version .jar : à côté du JAR ;</li>
+     *   <li>dans l'IDE : dans le dossier courant.</li>
+     * </ul>
      */
     private static String cheminBase() {
+        // le lanceur .exe fabriqué par jpackage renseigne son propre chemin dans
+        // cette propriété ; sans elle, la base finirait dans le sous-dossier « app »
+        String exe = System.getProperty("jpackage.app-path");
+        if (exe != null) {
+            return new File(new File(exe).getAbsoluteFile().getParentFile(), "parc.db").getAbsolutePath();
+        }
+
         try {
             File source = new File(Database.class.getProtectionDomain()
                     .getCodeSource().getLocation().toURI());

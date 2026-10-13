@@ -10,10 +10,10 @@ Si ce n'est pas le cas : https://adoptium.net (gratuit).
 
 UTILISATION
 1. Stock      : saisissez d'abord ce que vous possédez (bouton Achat)
-2. Charger    : affectez du matériel à un véhicule
-3. La liste   : montre ce qui est actuellement dans chaque véhicule
-4. Véhicule   : la liste déroulante en bas n'affiche qu'un seul camion
-5. Ctrl+F     : rechercher dans la liste
+2. Véhicules  : cliquez sur un camion à gauche pour voir son contenu
+3. Charger    : ajoutez du matériel dans le camion affiché
+4. Ctrl+F     : rechercher un véhicule
+5. Clic droit sur une ligne : modifier, déplacer ou retirer
 
 SAUVEGARDE
 Toutes les données sont dans le fichier parc.db, à côté de

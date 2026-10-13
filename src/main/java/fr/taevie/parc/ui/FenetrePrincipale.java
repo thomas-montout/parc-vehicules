@@ -434,6 +434,9 @@ public class FenetrePrincipale extends JFrame {
     }
 
     private String resume(LigneVehicule ligne) {
+        if (ligne.estTous() && ligne.articles() == 0) {
+            return "Aucun matériel chargé · " + pluriel(vehicules.size(), "véhicule", "véhicules") + " au parc";
+        }
         if (ligne.estTous()) {
             long equipes = toutesAffectations.stream().map(Affectation::getVehicule).distinct().count();
             return pluriel(ligne.articles(), "chargement", "chargements")

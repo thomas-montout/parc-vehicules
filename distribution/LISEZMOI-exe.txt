@@ -1,0 +1,31 @@
+ISO Stock — suivi du matériel embarqué
+======================================
+
+INSTALLATION
+Aucune, et rien à installer : Java est inclus.
+Copiez ce dossier où vous voulez (disque dur, clé USB)
+et double-cliquez sur « ISO Stock.exe ».
+
+Au tout premier lancement, Windows peut afficher
+« Windows a protégé votre ordinateur » : cliquez sur
+« Informations complémentaires », puis « Exécuter quand même ».
+Ce message apparaît pour tout logiciel qui n'est pas vendu
+par un éditeur enregistré auprès de Microsoft.
+
+UTILISATION
+1. Stock      : saisissez d'abord ce que vous possédez (bouton Achat)
+2. Véhicules  : cliquez sur un camion à gauche pour voir son contenu
+3. Charger    : ajoutez du matériel dans le camion affiché
+4. Ctrl+F     : rechercher un véhicule
+5. Clic droit sur une ligne : modifier, déplacer ou retirer
+
+SAUVEGARDE
+Toutes les données sont dans le fichier parc.db, à côté de
+« ISO Stock.exe ». Copiez-le régulièrement ailleurs : si vous le
+perdez, tout est perdu.
+
+MISE À JOUR
+Copiez votre parc.db de côté, remplacez le dossier par la
+nouvelle version, puis remettez-y votre parc.db.
+
+Contact : Thomas Montout — montoutthomas@gmail.com
