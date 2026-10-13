@@ -153,15 +153,70 @@ public class AffectationDao {
      */
     public int quantiteAffectee(int idMateriel) throws SQLException {
         String sql = """
-            SELECT COALESCE(SUM(quantite), 0)
-            FROM affectation
-            WHERE id_materiel = ? AND date_fin IS NULL
-            """;
+                SELECT COALESCE(SUM(quantite), 0)
+                FROM affectation
+                WHERE id_materiel = ? AND date_fin IS NULL
+                """;
 
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, idMateriel);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * L'identifiant de l'affectation en cours de ce matériel dans ce véhicule.
+     * Grâce à RG16, il ne peut y en avoir qu'une seule.
+     *
+     * @return l'id, ou 0 si le matériel n'est pas actuellement dans ce véhicule
+     * @throws SQLException si la lecture échoue
+     */
+    public int idAffectationEnCours(int idMateriel, int idVehicule) throws SQLException {
+        String sql = """
+                SELECT id_affectation FROM affectation
+                WHERE id_materiel = ? AND id_vehicule = ? AND date_fin IS NULL
+                """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idMateriel);
+            stmt.setInt(2, idVehicule);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * Quantité de ce matériel actuellement présente dans ce véhicule précis.
+     *
+     * @return la quantité, 0 si le matériel n'y est pas
+     * @throws SQLException si la lecture échoue
+     */
+    public int quantiteEnCours(int idMateriel, int idVehicule) throws SQLException {
+        String sql = """
+                SELECT COALESCE(SUM(quantite), 0) FROM affectation
+                WHERE id_materiel = ? AND id_vehicule = ? AND date_fin IS NULL
+                """;
+
+        try (Connection conn = Database.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idMateriel);
+            stmt.setInt(2, idVehicule);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
