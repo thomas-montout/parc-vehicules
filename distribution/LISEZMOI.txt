@@ -1,0 +1,31 @@
+ISO Stock — suivi du matériel embarqué
+======================================
+
+INSTALLATION
+Aucune. Copiez ce dossier où vous voulez (disque dur, clé USB)
+et double-cliquez sur lancer.bat.
+
+Java 17 ou plus récent doit être installé sur le poste.
+Si ce n'est pas le cas : https://adoptium.net (gratuit).
+
+UTILISATION
+1. Stock      : saisissez d'abord ce que vous possédez (bouton Achat)
+2. Charger    : affectez du matériel à un véhicule
+3. La liste   : montre ce qui est actuellement dans chaque véhicule
+4. Véhicule   : la liste déroulante en bas n'affiche qu'un seul camion
+5. Ctrl+F     : rechercher dans la liste
+
+SAUVEGARDE
+Toutes les données sont dans le fichier parc.db, à côté de
+l'application. Copiez-le régulièrement ailleurs : si vous le
+perdez, tout est perdu.
+
+MISE À JOUR
+Remplacez uniquement ISO-Stock.jar par la nouvelle version.
+Ne supprimez jamais parc.db : vos données sont dedans.
+
+EN CAS DE PROBLÈME
+Si rien ne s'ouvre, double-cliquez sur depannage.bat et envoyez
+une capture d'écran de la fenêtre qui s'affiche.
+
+Contact : Thomas Montout — montoutthomas@gmail.com

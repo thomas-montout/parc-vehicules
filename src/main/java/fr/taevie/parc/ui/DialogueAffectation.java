@@ -1,7 +1,6 @@
 package fr.taevie.parc.ui;
 
 import fr.taevie.parc.dao.MaterielDao;
-import fr.taevie.parc.dao.VehiculeDao;
 import fr.taevie.parc.model.Materiel;
 import fr.taevie.parc.model.Vehicule;
 import fr.taevie.parc.service.AffectationService;
@@ -10,16 +9,19 @@ import fr.taevie.parc.service.RegleGestionException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.KeyStroke;
 import javax.swing.SpinnerNumberModel;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 
 /**
@@ -39,9 +41,22 @@ public class DialogueAffectation extends JDialog {
     private boolean valide = false;
 
     public DialogueAffectation(Frame parent) {
+        this(parent, null);
+    }
+
+    /**
+     * @param parent     la fenêtre principale
+     * @param vehicule   le véhicule à présélectionner, ou null pour le premier de la liste
+     */
+    public DialogueAffectation(Frame parent, Vehicule vehicule) {
         super(parent, "Charger du matériel", true);
 
         remplirListes();
+        if (vehicule != null) {
+            // fonctionne grâce à Vehicule.equals : l'objet reçu et celui de la liste
+            // sont deux instances différentes du même camion
+            listeVehicules.setSelectedItem(vehicule);
+        }
 
         JPanel formulaire = new JPanel(new GridLayout(4, 2, 8, 8));
         formulaire.setBorder(BorderFactory.createEmptyBorder(16, 16, 8, 16));
@@ -71,6 +86,12 @@ public class DialogueAffectation extends JDialog {
         listeMateriels.addActionListener(e -> majDisponible());
         majDisponible();
 
+        // Entrée valide, Échap annule : les réflexes attendus d'une boîte de dialogue
+        getRootPane().setDefaultButton(valider);
+        getRootPane().registerKeyboardAction(e -> dispose(),
+                KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+                JComponent.WHEN_IN_FOCUSED_WINDOW);
+
         pack();
         setLocationRelativeTo(parent);
     }
@@ -85,7 +106,7 @@ public class DialogueAffectation extends JDialog {
             for (Materiel m : new MaterielDao().findAll()) {
                 listeMateriels.addItem(m);
             }
-            for (Vehicule v : new VehiculeDao().findAll()) {
+            for (Vehicule v : service.listerVehicules()) {
                 listeVehicules.addItem(v);
             }
         } catch (SQLException e) {

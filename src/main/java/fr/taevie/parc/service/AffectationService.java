@@ -2,6 +2,7 @@ package fr.taevie.parc.service;
 
 import fr.taevie.parc.dao.AffectationDao;
 import fr.taevie.parc.dao.MouvementStockDao;
+import fr.taevie.parc.dao.VehiculeDao;
 import fr.taevie.parc.model.Affectation;
 import fr.taevie.parc.model.Materiel;
 import fr.taevie.parc.model.Vehicule;
@@ -19,6 +20,16 @@ public class AffectationService {
 
     private final AffectationDao affectationDao = new AffectationDao();
     private final MouvementStockDao mouvementDao = new MouvementStockDao();
+    private final VehiculeDao vehiculeDao = new VehiculeDao();
+
+    /**
+     * Tous les véhicules du parc, triés par immatriculation.
+     * L'interface passe par ici plutôt que d'appeler le DAO directement :
+     * elle ne parle qu'à la couche service.
+     */
+    public List<Vehicule> listerVehicules() throws SQLException {
+        return vehiculeDao.findAll();
+    }
 
     /**
      * Quantité d'un matériel encore disponible, c'est-à-dire possédée mais
